@@ -1,22 +1,28 @@
 import schedule
 import time
-
+from datetime import datetime
 
 def reformat_file():
-    new_content = []
+    # 打开原始文件
     with open('f74bjd2h2ko99f3j5', 'r') as file:
-        for line in file:
-            parts = line.strip().split(',')
-            new_line = f"{parts[0]}:{parts[1]}#{parts[2]}"
-            new_content.append(new_line)
+        lines = file.readlines()
 
-    with open('proxy.txt', 'w') as new_file:
-        new_file.write('\n'.join(new_content))
+    # 重新编排内容
+    reformatted_lines = []
+    for line in lines:
+        ip, port, country, _ = line.strip().split(',')
+        reformatted_lines.append(f"{ip}:{port}#{country}\n")
 
+    # 将重新编排的内容写入新文件
+    with open('proxy.txt', 'w') as file:
+        file.writelines(reformatted_lines)
 
-# 每天上午9点执行任务
-schedule.every().day.at("09:00").do(reformat_file)
+    print(f"文件已更新于 {datetime.now()}")
 
+# 设置定时任务，每天上午9点执行
+schedule.every().day.at("14:05").do(reformat_file)
+
+# 保持脚本运行
 while True:
     schedule.run_pending()
     time.sleep(1)
