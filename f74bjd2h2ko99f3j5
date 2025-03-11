@@ -16494,3 +16494,144 @@
 92.223.44.19,2096,UZ,GCore Labs SA
 82.117.252.178,443,US,Green Floid
 38.54.30.6,443,VN,Kaopu Cloud HK
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+--card-bg: rgba(8, 12, 20, 0.95);
+--glow: 0 0 20px rgba(0, 255, 136, 0.3);
+font-family: 'Space Grotesk', sans-serif;
+text-align: center; /* Opsional, untuk memastikan teks sejajar */
+font-family: Arial, sans-serif; /* Font sederhana dan bersih */
+background: linear-gradient(90deg, red, orange, yellow
+background-color: rgba(63, 63, 63, 1); /* Hitam pekat (dark mode) */
+font-family: 'Rajdhani', sans-serif;
+0 0 5px rgba(0, 123, 255, 0.8)
+0 0 10px rgba(0, 123, 255, 0.8)
+0 0 20px rgba(0, 123, 255, 0.8)
+0 0 30px rgba(0, 123, 255, 0.8)
+0 0 40px rgba(0, 123, 255, 0.8);
+background: linear-gradient(45deg, var(--primary), var(--secondary), var(--dark));
+0%, 100% { transform: scale(1); filter: brightness(1); }
+header, footer {
+border: 0px solid rgba(143, 0, 0, 0.89); /* Border dengan warna abu-abu */
+.service-selector, .link1, .link2 {
+transition: background-color 0.3s, border-color 0.3s;
+.service-selector:hover, .link1:hover, .link2:hover {
+.container, .content {
+background-color: rgba(0, 0, 0, 0.82);
+box-shadow: 0 0 15px rgba(255, 255, 255, 0.6)
+0 0 30px rgba(0, 150, 255, 0.5);   /* Glow biru */
+background: rgba(0, 0, 0, 0);
+box-shadow: 2px 0 5px rgba(0, 0, 0, 0);
+text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+.filters > div,
+.button, .button1, .button2, .button3  {
+border: 0px solid rgba(26, 4, 83, 0.81); /* Warna border hijau */
+background-color: rgba(0, 255, 136, 0.1); /* Warna hijau */
+margin: 20px 0; /* 20px atas dan bawah, 0px kiri dan kanan */
+box-shadow: 0 5px 15px rgba(0, 255, 136, 0.1);
+border: 0px solid rgba(183, 43, 0, 0.97); /* Border dengan warna abu-abu */
+background-color: rgba(14, 116, 255, 0.97);
+background-color: rgba(255, 61, 68, 0.97);
+.button:hover { background-color: #2980b9; border: 1px solid rgba(197, 51, 6, 0.89); border-radius: 8px; }
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3)
+background-color: rgba(239, 80, 0, 0.87); /* Warna latar belakang untuk baris ganjil */
+background-color: rgba(3, 117, 1, 0.87); /* Warna latar belakang untuk baris genap */
+.copy-vless,
+.copy-vless877,
+.copy-vless1,
+.copy-vless1877,
+.copy-trojan,
+.copy-trojan877,
+.copy-vless:active,
+.copy-vless877:active,
+.copy-vless1:active,
+.copy-vless1877:active,
+.copy-trojan:active,
+.copy-trojan877:active,
+box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+.copy-vless-clash,
+.copy-vless-clash877,
+.copy-vless2,
+.copy-vless2877,
+.copy-trojan-clash,
+.copy-trojan-clash877,
+.copy-vless-clash:active,
+.copy-vless-clash877:active,
+.copy-vless2:active,
+.copy-vless2877:active,
+.copy-trojan-clash:active,
+.copy-trojan-clash877:active,
+background-color: rgba(151, 180, 1, 1); /* Warna dasar biru */
+border: 1px solid rgba(197, 51, 6, 0.89); /* Border biru tua */
+background-color: rgba(0, 172, 128, 1);
+background-color: rgba(50, 0, 63, 0.84);
+background-color: rgba(0, 15, 123, 0.78);
+0 0 4px rgba(0, 123, 255, 0.8)
+0 0 6px rgba(0, 123, 255, 0.8)
+0 0 8px rgba(0, 123, 255, 0.8)
+0 0 15px rgba(0, 123, 255, 0.8);
+border: 0px solid rgba(197, 51, 6, 0.89); /* Border dengan warna abu-abu */
+border: px solid rgba(183, 43, 0, 0.97); /* Border dengan warna abu-abu */
+border: 1px solid rgba(183, 43, 0, 0.97); /* Border dengan warna abu-abu */
+background-color: rgba(255, 0, 0, 0.86);
+background-color: rgba(255, 108, 0, 0.86);
+<a href="https://wa.me/6281335135082" target="_blank" rel="noopener noreferrer" style="font-family: 'Rajdhani', sans-serif;">
+<a href="https://t.me/seaker877" target="_blank" rel="noopener noreferrer" style="font-family: 'Rajdhani', sans-serif;">
+<a href="https://t.me/kcepu_bot" target="_blank" rel="noopener noreferrer" style="font-family: 'Rajdhani', sans-serif;">
+<select id="items-per-page" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+<input type="text" id="search-bar" placeholder="Search ID" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+</td><td><select class="service-selector" id="app" class="form-control" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+</td><td><select class="service-selector" id="bug" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+<select class="service-selector" id="wildcard" class="form-control" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+</td><td> <select class="service-selector" id="configType" class="form-control" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+</td><td><select class="service-selector" id="country" class="form-control" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+<input class="service-selector" type="number" id="limit" class="form-control" value="10" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+</td><td> <input class="service-selector" type="text" id="link1" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+const configType = Math.random().toString(36).substring(2, 10); // Generate random string
+document.getElementById("copyLink1").setAttribute("data-link", link1);
+title: 'Berhasil!',
+text: 'Link Sub telah berhasil disalin',
+background: 'rgba(6, 18, 67, 0.89)'
+icon: 'success',
+color: 'red', // Warna teks
+popup: 'rounded-popup',
+},
+confirmButtonColor: '#3085d6', // Warna tombol konfirmasi
+title: 'Gagal!',
+text: 'Terjadi kesalahan saat menyalin link.',
+icon: 'error',
+confirmButtonColor: '#d33', // Warna tombol konfirmasi
+document.addEventListener("DOMContentLoaded", function () {
+var inputs = document.querySelectorAll("#app, #configType, #bug, #tls
+input.addEventListener("change", generateLinks);
+}, 500); // Menunggu durasi animasi selesai (500ms)
+return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+const id = filteredProxies.length > 0 ? filteredProxies[0].split(',')[2] : ''; // Ambil ID dari proxy pertama, asumsikan format 'ip,port
+let itemsPerPage = parseInt(perPageSelect.value, 15);
+perPageSelect.addEventListener('change', () => {
+itemsPerPage = parseInt(perPageSelect.value, 15);
+renderProxies(filteredProxies, proxyList, pagination, itemsPerPage);
+searchInput.addEventListener('input', () => {
+const [ip, port, id, isp] = proxy.split('
+.catch(error => console.error("Error fetching proxy data:", error));
+function checkProxyStatus(ip, port, statusElement) {
+// Memperkecil nilai latency, misalnya dibagi dengan 10
+// Membuang bagian setelah desimal, hanya menyisakan nilai integer
+function renderProxies(proxies, proxyList, pagination, itemsPerPage) {
+const pageProxies = proxies.slice(start, end);
+<td><select class="service-selector" style="font-family: 'Rajdhani', sans-serif; padding: 10px; background-color: rgba(0, 71, 200
+row.querySelector('.copy-vless').addEventListener('click', () => {
+text: 'COPY VLESS SIMPLE SUKSES!',
+row.querySelector('.copy-vless-clash').addEventListener('click', () => {
+text: 'COPY VLESS RIBET SUKSES!',
+row.querySelector('.copy-trojan').addEventListener('click', () => {
+text: 'COPY TROJAN SIMPLE SUKSES!',
+row.querySelector('.copy-trojan-clash877').addEventListener('click', () => {
+text: 'COPY TROJAN RIBET SUKSES!',
+row.querySelector('.copy-ss').addEventListener('click', () => {
+text: 'COPY SHADOWSOCK SIMPLE SUKSES!',
+row.querySelector('.copy-ss1').addEventListener('click', () => {
+text: 'COPY SHADOWSOCK RIBET SUKSES!',
+checkProxyStatus(ip, port, document.getElementById(`status-${ip}-${port}`));
+const startPage = Math.max(1, currentPage - 2);
+const endPage = Math.min(totalPages, currentPage + 2);
