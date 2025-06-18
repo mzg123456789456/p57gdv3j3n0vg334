@@ -7,16 +7,29 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import ipaddress  # Untuk mengurutkan IP
 
 def bersihkan_isp(isp):
-    """Membersihkan teks ISP dari karakter titik dan koma menjadi kosong"""
-    return isp.replace('.', '').replace(',', '').strip()
+    """Membersihkan teks ISP: 
+    - Hapus titik dan koma
+    - Ganti underscore dengan spasi
+    - Biarkan dash (-) tetap"""
+    isp = isp.replace('.', '').replace(',', '')  # Hapus titik dan koma
+    isp = isp.replace('_', ' ')  # Ganti underscore dengan spasi
+    return isp.strip()
 
 def ip_sort_key(ip_str):
-    """Fungsi untuk mengurutkan alamat IP secara numerik"""
+    """Fungsi untuk mengurutkan alamat IP secara numerik (IPv4 saja)"""
     try:
-        ip = ipaddress.ip_address(ip_str)
-        return (0, ip)  # IPv4/IPv6 valid
-    except ValueError:
-        return (1, ip_str)  # IP tidak valid
+        ip = ipaddress.IPv4Address(ip_str)  # Hanya IPv4
+        return ip
+    except ipaddress.AddressValueError:
+        return ip_str  # Jika bukan IPv4, urutkan sebagai string
+
+def is_valid_ipv4(ip_str):
+    """Cek apakah string adalah IPv4 valid"""
+    try:
+        ipaddress.IPv4Address(ip_str)
+        return True
+    except ipaddress.AddressValueError:
+        return False
 
 def check_proxy_single(ip, port, api_url_template):
     """Mengecek satu proxy menggunakan API."""
@@ -95,17 +108,24 @@ def main():
     seen_proxies = set()  # Untuk deteksi duplikat (ip, port)
 
     try:
-        with open(input_file, "r") as f:
+        # Gunakan encoding 'latin-1' untuk file CSV
+        with open(input_file, "r", encoding='latin-1') as f:
             reader = csv.reader(f)
             rows = []
             for row in reader:
-                if len(row) >= 4:
-                    # Bersihkan kolom ISP
+                # Hanya proses baris dengan 4 kolom dan IP valid
+                if len(row) >= 4 and is_valid_ipv4(row[0].strip()):
+                    # Bersihkan kolom ISP: hapus titik/koma, ganti _ dengan spasi
                     row[3] = bersihkan_isp(row[3])
                     rows.append(row)
-        print(f"Memproses {len(rows)} baris dari file input.")
+                elif len(row) >= 4:
+                    print(f"Baris diabaikan (IP tidak valid): {row[0]}:{row[1]}")
+        print(f"Memproses {len(rows)} baris valid dari file input.")
     except FileNotFoundError:
         print(f"File {input_file} tidak ditemukan.")
+        return
+    except Exception as e:
+        print(f"Error membaca file: {e}")
         return
 
     with ThreadPoolExecutor(max_workers=10) as executor:
@@ -134,12 +154,13 @@ def main():
             if error:
                 error_logs.append(error)
 
-    # Urutkan berdasarkan IP
+    # Urutkan berdasarkan IP (IPv4 saja)
     alive_proxies.sort(key=lambda row: ip_sort_key(row[0].strip()))
 
     # Tulis proxy yang aktif ke file output sementara
     try:
-        with open(output_file, "w", newline="") as f:
+        # Gunakan encoding yang sama untuk output
+        with open(output_file, "w", newline="", encoding='latin-1') as f:
             writer = csv.writer(f)
             writer.writerows(alive_proxies)
         print(f"File output {output_file} telah diperbarui.")
@@ -150,7 +171,7 @@ def main():
     # Tulis error ke file error.txt
     if error_logs:
         try:
-            with open(error_file, "w") as f:
+            with open(error_file, "w", encoding='utf-8') as f:
                 for error in error_logs:
                     f.write(error + "\n")
             print(f"Beberapa error telah dicatat di {error_file}.")
