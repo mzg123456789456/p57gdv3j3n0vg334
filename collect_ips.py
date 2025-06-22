@@ -1,5 +1,6 @@
 import requests
 import os
+from pathlib import Path
 
 # 目标URL
 url = 'https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
