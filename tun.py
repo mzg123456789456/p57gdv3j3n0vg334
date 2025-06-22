@@ -4,10 +4,7 @@ import re
 import os
 
 # 目标URL列表
-urls = ['https://api.uouin.com/cloudflare.html', 
-        'https://ip.164746.xyz',
-        'https://addressesapi.090227.xyz/cmcc',
-        'https://addressesapi.090227.xyz/ct'
+urls = ['https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
         ]
 
 # 正则表达式用于匹配IP地址和端口
@@ -34,10 +31,8 @@ for url in urls:
         soup = BeautifulSoup(response.text, 'html.parser')
         
         # 根据网站的不同结构找到包含IP地址的元素
-        if url in ['https://api.uouin.com/cloudflare.html',
-                  'https://ip.164746.xyz',
-                  'https://addressesapi.090227.xyz/cmcc',
-                  'https://addressesapi.090227.xyz/ct']:
+        if url in ['https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
+                  ]:
             elements = soup.find_all('tr')
         else:
             elements = soup.find_all('li')
