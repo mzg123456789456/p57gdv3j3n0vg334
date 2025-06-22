@@ -5,10 +5,19 @@ from pathlib import Path
 # 目标URL
 url = 'https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
 
+# 确保输出目录存在
+output_dir = Path("output")
+output_dir.mkdir(exist_ok=True)
+
+# 输出文件路径
+kr_file = output_dir / "KRip.txt"
+jp_file = output_dir / "JPip.txt"
+sg_file = output_dir / "SGip.txt"
+
 # 检查并删除已存在的文件
-for filename in ['KRip.txt', 'JPip.txt', 'SGip.txt']:
-    if os.path.exists(filename):
-        os.remove(filename)
+for file in [kr_file, jp_file, sg_file]:
+    if file.exists():
+        file.unlink()
 
 # 使用集合来存储不同国家的IP地址，自动去重
 kr_ips = set()
@@ -16,8 +25,13 @@ jp_ips = set()
 sg_ips = set()
 
 try:
+    # 设置User-Agent模拟浏览器请求，避免被GitHub拦截
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    
     # 发送HTTP请求获取网页内容
-    response = requests.get(url)
+    response = requests.get(url, headers=headers, timeout=10)
     response.raise_for_status()  # 检查请求是否成功
     
     # 按行处理内容
@@ -37,13 +51,13 @@ try:
                 sg_ips.add(ip)
     
     # 将IP地址写入对应的文件
-    with open('KRip.txt', 'w') as f:
+    with open(kr_file, 'w') as f:
         f.write('\n'.join(kr_ips) + '\n')
     
-    with open('JPip.txt', 'w') as f:
+    with open(jp_file, 'w') as f:
         f.write('\n'.join(jp_ips) + '\n')
     
-    with open('SGip.txt', 'w') as f:
+    with open(sg_file, 'w') as f:
         f.write('\n'.join(sg_ips) + '\n')
     
     # 打印结果
@@ -54,5 +68,7 @@ try:
 
 except requests.exceptions.RequestException as e:
     print(f'请求失败: {e}')
+    exit(1)  # 非零退出码表示失败
 except Exception as e:
     print(f'发生错误: {e}')
+    exit(1)
