@@ -9,8 +9,8 @@ url = 'https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/h
 ip_pattern = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 
 # 检查ip.txt文件是否存在,如果存在则删除它
-if os.path.exists('sgip.txt'):
-    os.remove('sgip.txt')
+if os.path.exists('ip.txt'):
+    os.remove('ip.txt')
 
 # 使用集合来存储符合条件的IP地址（自动去重）
 filtered_ips = set()
@@ -34,7 +34,7 @@ for match in ip_matches:
         filtered_ips.add(ip)
 
 # 将符合条件的IP地址写入文件
-with open('sgip.txt', 'w') as file:
+with open('ip.txt', 'w') as file:
     for ip in filtered_ips:
         file.write(ip + '\n')
 
