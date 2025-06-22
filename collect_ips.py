@@ -12,24 +12,30 @@ ip_pattern = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 if os.path.exists('ip.txt'):
     os.remove('ip.txt')
 
-# 使用集合来存储IP地址，自动去重
-unique_ips = set()
+# 使用集合来存储符合条件的IP地址（自动去重）
+filtered_ips = set()
 
 # 发送HTTP请求获取内容
 response = requests.get(url)
-
-# 直接提取文本内容（因为GitHub Raw返回的是纯文本，不是HTML）
 content = response.text
 
-# 查找所有IP地址
-ip_matches = re.findall(ip_pattern, content)
+# 查找所有IP地址及其上下文
+ip_matches = re.finditer(ip_pattern, content)
 
-# 将找到的IP地址添加到集合中（自动去重）
-unique_ips.update(ip_matches)
+for match in ip_matches:
+    ip = match.group()
+    # 获取IP前后的文本（用于检查是否包含443和SG）
+    start_pos = max(0, match.start() - 20)  # 往前取20个字符
+    end_pos = min(len(content), match.end() + 20)  # 往后取20个字符
+    context = content[start_pos:end_pos]
+    
+    # 检查是否同时包含 "443" 和 "SG"（不区分大小写）
+    if "443" in context and ("SG" in context or "sg" in context):
+        filtered_ips.add(ip)
 
-# 将去重后的IP地址写入文件
+# 将符合条件的IP地址写入文件
 with open('ip.txt', 'w') as file:
-    for ip in unique_ips:
+    for ip in filtered_ips:
         file.write(ip + '\n')
 
-print(f'共找到 {len(unique_ips)} 个唯一IP地址，已保存到ip.txt文件中。')
+print(f'共找到 {len(filtered_ips)} 个符合条件的IP地址（含443和SG），已保存到ip.txt文件中。')
