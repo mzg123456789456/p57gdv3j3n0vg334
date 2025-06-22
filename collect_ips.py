@@ -1,74 +1,35 @@
 import requests
+import re
 import os
-from pathlib import Path
 
 # 目标URL
 url = 'https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
 
-# 确保输出目录存在
-output_dir = Path("output")
-output_dir.mkdir(exist_ok=True)
+# 正则表达式用于匹配IP地址
+ip_pattern = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 
-# 输出文件路径
-kr_file = output_dir / "KRip.txt"
-jp_file = output_dir / "JPip.txt"
-sg_file = output_dir / "SGip.txt"
+# 检查ip.txt文件是否存在,如果存在则删除它
+if os.path.exists('ip.txt'):
+    os.remove('ip.txt')
 
-# 检查并删除已存在的文件
-for file in [kr_file, jp_file, sg_file]:
-    if file.exists():
-        file.unlink()
+# 使用集合来存储IP地址，自动去重
+unique_ips = set()
 
-# 使用集合来存储不同国家的IP地址，自动去重
-kr_ips = set()
-jp_ips = set()
-sg_ips = set()
+# 发送HTTP请求获取内容
+response = requests.get(url)
 
-try:
-    # 设置User-Agent模拟浏览器请求，避免被GitHub拦截
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    
-    # 发送HTTP请求获取网页内容
-    response = requests.get(url, headers=headers, timeout=10)
-    response.raise_for_status()  # 检查请求是否成功
-    
-    # 按行处理内容
-    for line in response.text.splitlines():
-        # 分割每行内容
-        parts = line.split(',')
-        if len(parts) >= 4:  # 确保有足够的部分
-            ip = parts[0].strip()  # 提取第一个逗号前的IP
-            country = parts[2].strip()  # 提取国家代码
-            
-            # 根据国家代码添加到相应的集合
-            if country == 'KR':
-                kr_ips.add(ip)
-            elif country == 'JP':
-                jp_ips.add(ip)
-            elif country == 'SG':
-                sg_ips.add(ip)
-    
-    # 将IP地址写入对应的文件
-    with open(kr_file, 'w') as f:
-        f.write('\n'.join(kr_ips) + '\n')
-    
-    with open(jp_file, 'w') as f:
-        f.write('\n'.join(jp_ips) + '\n')
-    
-    with open(sg_file, 'w') as f:
-        f.write('\n'.join(sg_ips) + '\n')
-    
-    # 打印结果
-    print(f'提取完成:')
-    print(f'KR IPs: {len(kr_ips)} 个')
-    print(f'JP IPs: {len(jp_ips)} 个')
-    print(f'SG IPs: {len(sg_ips)} 个')
+# 直接提取文本内容（因为GitHub Raw返回的是纯文本，不是HTML）
+content = response.text
 
-except requests.exceptions.RequestException as e:
-    print(f'请求失败: {e}')
-    exit(1)  # 非零退出码表示失败
-except Exception as e:
-    print(f'发生错误: {e}')
-    exit(1)
+# 查找所有IP地址
+ip_matches = re.findall(ip_pattern, content)
+
+# 将找到的IP地址添加到集合中（自动去重）
+unique_ips.update(ip_matches)
+
+# 将去重后的IP地址写入文件
+with open('ip.txt', 'w') as file:
+    for ip in unique_ips:
+        file.write(ip + '\n')
+
+print(f'共找到 {len(unique_ips)} 个唯一IP地址，已保存到ip.txt文件中。')
