@@ -1,6 +1,7 @@
 import requests
 import re
 import os
+import random  # 新增随机模块
 
 # 目标URL
 url = 'https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
@@ -35,32 +36,43 @@ for match in ip_matches:
     start_pos = max(0, match.start() - 20)  # 往前取20个字符
     end_pos = min(len(content), match.end() + 20)  # 往后取20个字符
     context = content[start_pos:end_pos]
-    
+
     # 检查是否包含443及JP（日本）
     if "443" in context and ("JP" in context or "jp" in context):
         japan_ips.add(ip)
-    
+
     # 检查是否包含443及KR（韩国）
     if "443" in context and ("KR" in context or "kr" in context):
         korea_ips.add(ip)
 
     # 检查是否包含443及SG（新加坡）
     if "443" in context and ("SG" in context or "sg" in context):
-        korea_ips.add(ip)
+        Singapore_ips.add(ip)  # 修正为新加坡集合
+
+# 随机选择最多20个IP（如果可用）
+def get_random_sample(ip_set, sample_size=20):
+    if len(ip_set) <= sample_size:
+        return list(ip_set)
+    return random.sample(list(ip_set), sample_size)
+
+# 获取随机样本
+japan_sample = get_random_sample(japan_ips)
+korea_sample = get_random_sample(korea_ips)
+singapore_sample = get_random_sample(Singapore_ips)
 
 # 将符合条件的IP地址写入文件
 with open('jip.txt', 'w') as file:
-    for ip in japan_ips:
+    for ip in japan_sample:
         file.write(ip + '\n')
 
 with open('kip.txt', 'w') as file:
-    for ip in korea_ips:
+    for ip in korea_sample:
         file.write(ip + '\n')
 
 with open('sip.txt', 'w') as file:
-    for ip in korea_ips:
+    for ip in singapore_sample:
         file.write(ip + '\n')
 
-print(f'共找到 {len(japan_ips)} 个符合条件的日本IP地址（含443和JP），已保存到jip.txt文件中。')
-print(f'共找到 {len(korea_ips)} 个符合条件的韩国IP地址（含443和KR），已保存到kip.txt文件中。')
-print(f'共找到 {len(Singapore_ips)} 个符合条件的新加坡IP地址（含443和SG），已保存到sip.txt文件中。')
+print(f'共找到 {len(japan_ips)} 个符合条件的日本IP地址，随机选择 {len(japan_sample)} 个保存到jip.txt')
+print(f'共找到 {len(korea_ips)} 个符合条件的韩国IP地址，随机选择 {len(korea_sample)} 个保存到kip.txt')
+print(f'共找到 {len(Singapore_ips)} 个符合条件的新加坡IP地址，随机选择 {len(singapore_sample)} 个保存到sip.txt')
