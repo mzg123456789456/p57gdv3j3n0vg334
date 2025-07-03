@@ -1,64 +1,77 @@
 import requests
 import re
+import os
 import random
 
 # 目标URL
 url = 'https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
 
-# 正则表达式匹配 IP 和端口
-ip_port_pattern = r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d+)'
+# 正则表达式用于匹配IP地址
+ip_pattern = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 
-# 存储不同国家的 IP
-country_ips = {
-    "日本": [],
-    "韩国": [],
-    "新加坡": []
-}
+# 检查文件是否存在，如果存在则删除
+def clear_file(filename):
+    if os.path.exists(filename):
+        os.remove(filename)
 
-# 发送 HTTP 请求获取内容
+clear_file('iplist.txt')  # 清理 iplist.txt
+
+# 使用集合来存储符合条件的IP地址（自动去重）
+japan_ips = set()  # 存储 JP 相关的 IP
+korea_ips = set()  # 存储 KR 相关的 IP
+singapore_ips = set()  # 存储 SG 相关的 IP
+
+# 发送HTTP请求获取内容
 response = requests.get(url)
 content = response.text
 
-# 查找所有 IP:端口 组合
-ip_port_matches = re.finditer(ip_port_pattern, content)
+# 查找所有IP地址及其上下文
+ip_matches = re.finditer(ip_pattern, content)
 
-for match in ip_port_matches:
-    ip = match.group(1)  # IP 地址
-    port = match.group(2)  # 端口
-    start_pos = max(0, match.start() - 20)  # 往前取 20 个字符
-    end_pos = min(len(content), match.end() + 20)  # 往后取 20 个字符
+for match in ip_matches:
+    ip = match.group()
+    # 获取IP前后的文本（用于检查是否包含443和JP/KR/SG）
+    start_pos = max(0, match.start() - 20)  # 往前取20个字符
+    end_pos = min(len(content), match.end() + 20)  # 往后取20个字符
     context = content[start_pos:end_pos]
 
-    # 检查国家（JP=日本, KR=韩国, SG=新加坡）
-    if "JP" in context or "jp" in context:
-        country = "日本"
-    elif "KR" in context or "kr" in context:
-        country = "韩国"
-    elif "SG" in context or "sg" in context:
-        country = "新加坡"
-    else:
-        continue  # 如果不是这 3 个国家，跳过
+    # 检查是否包含443及JP（日本）
+    if "443" in context and ("JP" in context or "jp" in context):
+        japan_ips.add(ip)
 
-    if port == "443":  # 仅保留 443 端口的 IP
-        country_ips[country].append(f"{ip}:{port}#{country}")
+    # 检查是否包含443及KR（韩国）
+    if "443" in context and ("KR" in context or "kr" in context):
+        korea_ips.add(ip)
 
-# 每个国家随机选 20 个 IP（如果不足 20 个，则全部选取）
-selected_ips = []
-for country, ips in country_ips.items():
-    random.shuffle(ips)  # 打乱顺序
-    selected = ips[:20] if len(ips) >= 20 else ips  # 最多取 20 个
-    selected_ips.extend(selected)
+    # 检查是否包含443及SG（新加坡）
+    if "443" in context and ("SG" in context or "sg" in context):
+        singapore_ips.add(ip)
 
-# 按国家排序（日本→韩国→新加坡）
-selected_ips_sorted = sorted(selected_ips, key=lambda x: x.split("#")[1])
+# 随机选择最多20个IP（如果可用）
+def get_random_sample(ip_set, sample_size=20):
+    if len(ip_set) <= sample_size:
+        return list(ip_set)
+    return random.sample(list(ip_set), sample_size)
 
-# 覆盖写入 iplist.txt（格式：IP:端口#国家编号）
+# 获取随机样本
+japan_sample = get_random_sample(japan_ips)
+korea_sample = get_random_sample(korea_ips)
+singapore_sample = get_random_sample(singapore_ips)
+
+# 将符合条件的IP地址按照指定格式写入iplist.txt
 with open('iplist.txt', 'w') as file:
-    country_count = {"日本": 1, "韩国": 1, "新加坡": 1}  # 每个国家的编号从 1 开始
-    for entry in selected_ips_sorted:
-        country = entry.split("#")[1]
-        file.write(f"{entry}{country_count[country]}\n")  # 如 152.168.31.26:443#日本1
-        country_count[country] += 1  # 编号递增
+    # 写入日本IP
+    for idx, ip in enumerate(japan_sample, 1):
+        file.write(f"{ip}:443#日本{idx}\n")
+    
+    # 写入韩国IP
+    for idx, ip in enumerate(korea_sample, 1):
+        file.write(f"{ip}:443#韩国{idx}\n")
+    
+    # 写入新加坡IP
+    for idx, ip in enumerate(singapore_sample, 1):
+        file.write(f"{ip}:443#新加坡{idx}\n")
 
-print(f"已提取 60 个 IP（日本 {len(country_ips['日本'][:20])} 个，韩国 {len(country_ips['韩国'][:20])} 个，新加坡 {len(country_ips['新加坡'][:20])} 个）")
-print(f"结果已覆盖保存到 iplist.txt")
+print(f'共找到 {len(japan_ips)} 个符合条件的日本IP地址，随机选择 {len(japan_sample)} 个保存到iplist.txt')
+print(f'共找到 {len(korea_ips)} 个符合条件的韩国IP地址，随机选择 {len(korea_sample)} 个保存到iplist.txt')
+print(f'共找到 {len(singapore_ips)} 个符合条件的新加坡IP地址，随机选择 {len(singapore_sample)} 个保存到iplist.txt')
