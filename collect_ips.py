@@ -6,6 +6,11 @@ import random
 # 目标URL
 url = 'https://raw.githubusercontent.com/mzg123456789456/p57gdv3j3n0vg334/refs/heads/main/f74bjd2h2ko99f3j5'
 
+# 设置请求头，模拟浏览器
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+}
+
 # 正则表达式用于匹配IP地址
 ip_pattern = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 
@@ -24,9 +29,14 @@ japan_ips = set()  # 存储 JP 相关的 IP
 korea_ips = set()  # 存储 KR 相关的 IP
 Singapore_ips = set()  # 存储 SG 相关的 IP
 
-# 发送HTTP请求获取内容
-response = requests.get(url)
-content = response.text
+try:
+    # 发送HTTP请求获取内容，添加请求头
+    response = requests.get(url, headers=headers, timeout=10)
+    response.raise_for_status()  # 如果状态不是200，引发HTTPError
+    content = response.text
+except requests.exceptions.RequestException as e:
+    print(f"请求失败: {e}")
+    exit(1)
 
 # 查找所有IP地址及其上下文
 ip_matches = re.finditer(ip_pattern, content)
